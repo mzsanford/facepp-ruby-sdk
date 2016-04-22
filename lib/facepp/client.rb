@@ -43,7 +43,7 @@ end
 class FacePP
 
   class HttpException < StandardError
-    def initialize(reponse)
+    def initialize(response)
       @response = response
     end
 
