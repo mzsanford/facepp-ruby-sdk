@@ -43,8 +43,15 @@ end
 class FacePP
 
   class HttpException < StandardError
+    attr_accessor :response, :json
+    
     def initialize(response)
       @response = response
+      begin
+        @json = JSON.load(@response.body)
+      rescue JSON::ParserError => e
+        @json = nil
+      end
     end
 
     def code
