@@ -26,7 +26,7 @@ describe FacePP do
   describe 'person' do
     let(:name) { "Haskell-#{rand 10}" }
 
-    before :all do
+    before do
       res = api.person.create(person_name: name)
       res.should be_person
       @person_id = res['person_id']

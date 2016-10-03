@@ -44,7 +44,7 @@ class FacePP
 
   class HttpException < StandardError
     attr_accessor :response, :json
-    
+
     def initialize(response)
       @response = response
       begin
@@ -161,6 +161,7 @@ class FacePP
   def initialize(key, secret, options={})
     decode = options.fetch :decode, true
     api_host = options.fetch :host, 'api.faceplusplus.com'
+    api_version = options.fetch :version, nil
     make_hash = lambda { Hash.new {|h,k| h[k] = make_hash.call make_hash } }
 
     APIS.each do |api|
@@ -187,7 +188,13 @@ class FacePP
           end
         end
 
-        req = Net::HTTP::Post.new("#{api}?#{URI::encode_www_form(fields)}")
+        path = ''
+        if api_version
+          path << "/v#{api_version}"
+        end
+        path << api
+
+        req = Net::HTTP::Post.new("#{path}?#{URI::encode_www_form(fields)}")
         if form.has_file?
           req.set_content_type form.content_type
           req.body = form.inspect
